@@ -4,7 +4,7 @@
   "description": "Primer proyecto grande para realizar actividad entregable 3, utilizando realaciones y temas de seguridad",
   "main": "index.js",
   "scripts": {
-    "test": "npm start"
+    "test": "nodemon server.js"
   },
   "author": "Daniel Andrade",
   "license": "ISC",
