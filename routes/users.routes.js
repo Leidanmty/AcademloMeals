@@ -1,5 +1,4 @@
 const express = require("express");
-
 //Controllers
 const {
   createUser,

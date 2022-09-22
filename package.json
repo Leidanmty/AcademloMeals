@@ -4,7 +4,7 @@
   "description": "Primer proyecto grande para realizar actividad entregable 3, utilizando realaciones y temas de seguridad",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm start"
   },
   "author": "Daniel Andrade",
   "license": "ISC",

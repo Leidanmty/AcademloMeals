@@ -70,11 +70,15 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const { user } = req;
+  try {
+    const { user } = req;
 
-  await user.update({ status: "deleted" });
+    await user.update({ status: "deleted" });
 
-  res.status(204).json({ status: "success" });
+    res.status(204).json({ status: "success" });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const allOrders = async (req, res) => {
