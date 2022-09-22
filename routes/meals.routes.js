@@ -14,7 +14,7 @@ const {
 //Routes
 const mealsRoutes = express.Router();
 
-mealsRoutes.post("/restaurantId", createMeal);
+mealsRoutes.post("/:restaurantId", createMeal);
 
 mealsRoutes.get("/", allMeals);
 

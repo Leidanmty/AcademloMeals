@@ -1,7 +1,7 @@
 //files whit security
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
+/*const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");*/
 
 //Models
 const { User } = require("../models/users.model");
