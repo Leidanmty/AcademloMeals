@@ -1,132 +1,118 @@
+//files whit security
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
 //Models
-const { Restaurant } = require("../models/restaurant.model");
-const { Review } = require("../models/review.model");
-const { User } = require("../models/user.model");
+const { Restaurant } = require('../models/restaurant.model');
+const { Review } = require('../models/review.model');
+const { User } = require('../models/user.model');
+
+// Utils
+const { catchAsync } = require('../utils/catchAsync.util');
+const { AppError } = require('../utils/appError.util');
+
+dotenv.config({ path: './details.env' });
+
 //Creating endpoints functions
-const createRestaurant = async (req, res) => {
-  try {
-    const { name, address, rating } = req.body;
-    const newRestaurant = await Restaurant.create({ name, address, rating });
+const createRestaurant = catchAsync(async (req, res, next) => {
+  const { name, address, rating } = req.body;
+  const newRestaurant = await Restaurant.create({ name, address, rating });
 
-    res.status(201).json({
-      status: "succes",
-      data: {
-        newRestaurant,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  res.status(201).json({
+    status: 'succes',
+    data: {
+      newRestaurant,
+    },
+  });
+});
 
-const allRestaurants = async (req, res) => {
-  try {
-    const restaurants = await Restaurant.findAll({});
+const allRestaurants = catchAsync(async (req, res, next) => {
+  const restaurants = await Restaurant.findAll({
+    where: { status: 'active' },
+    include: { model: Review, where: { status: 'active', required: false} }
+  });
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        restaurants,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      restaurants,
+    },
+  });
+});
 
-const oneRestaurant = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findOne({
-      where: { id },
-    });
+const oneRestaurant = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        restaurant,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const restaurant = await Restaurant.findOne({
+    where: { id },
+    include: { model: Review, where: { status: 'active', required: false} }
+  });
 
-const updateRestaurant = async (req, res) => {
-  try {
-    const { name, address } = req.body;
-    const { restaurant } = req;
+  res.status(200).json({
+    status: 'success',
+    data: {
+      restaurant,
+    },
+  });
+});
 
-    await restaurant.update({ name, address });
+const updateRestaurant = catchAsync(async (req, res, next) => {
+  const { name, address } = req.body;
+  const { restaurant } = req;
 
-    res.status(200).json({
-      status: "success",
-      data: { restaurant },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  await restaurant.update({ name, address });
 
-const removeRestaurant = async (req, res) => {
-  try {
-    const { restaurant } = req;
+  res.status(200).json({
+    status: 'success',
+    data: { restaurant },
+  });
+});
 
-    await restaurant.update({ status: "deleted" });
+const removeRestaurant = catchAsync(async (req, res, next) => {
+  const { restaurant } = req;
 
-    res.status(204).json({ status: "success" });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  await restaurant.update({ status: 'deleted' });
 
-const createReview = async (req, res) => {
-  try {
-    const { comment, rating } = req.body;
-    const { restaurant } = req;
+  res.status(204).json({ status: 'success' });
+});
 
-    const newReview = await Review.create({
-      comment,
-      rating,
-      restaurantId: restaurant.id,
-      userId: 1,
-    });
+const createReview = catchAsync(async (req, res, next) => {
+  const { comment, rating } = req.body;
+  const { restaurant } = req;
 
-    res.status(201).json({
-      status: "succes",
-      data: { newReview },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const newReview = await Review.create({
+    comment,
+    rating,
+    restaurantId: restaurant.id,
+    userId: 1,
+  });
 
-const updateReview = async (req, res) => {
-  try {
-    const { comment, rating } = req.body;
-    const { restaurant } = req;
+  res.status(201).json({
+    status: 'succes',
+    data: { newReview },
+  });
+});
 
-    await restaurant.update({ comment, rating });
+const updateReview = catchAsync(async (req, res, next) => {
+  const { comment, rating } = req.body;
+  const { restaurant } = req;
 
-    res.status(200).json({
-      status: "success",
-      data: { restaurant },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  await restaurant.update({ comment, rating });
 
-const deleteReview = async (req, res) => {
-  try {
-    const { restaurant } = req;
+  res.status(200).json({
+    status: 'success',
+    data: { restaurant },
+  });
+});
 
-    await restaurant.update({ status: "deleted" });
+const deleteReview = catchAsync(async (req, res, next) => {
+  const { restaurant } = req;
 
-    res.status(204).json({ status: "success" });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  await restaurant.update({ status: 'deleted' });
+
+  res.status(204).json({ status: 'success' });
+});
 
 module.exports = {
   createRestaurant,

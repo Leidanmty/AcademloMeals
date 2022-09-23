@@ -1,9 +1,12 @@
 //Models
 const { Meal } = require("../models/meal.model");
 
+// Utils
+const { catchAsync } = require('../utils/catchAsync.util')
+const { AppError } = require('../utils/appError.util')
+
 //Middleware
-const mealExist = async (req, res, next) => {
-  try {
+const mealExist = catchAsync(async (req, res, next) => {
     const { id } = req.params;
 
     const meal = await Meal.findOne({ where: { id } });
@@ -17,13 +20,9 @@ const mealExist = async (req, res, next) => {
 
     req.meal = meal;
     next();
-  } catch (error) {
-    console.log(error);
-  }
-};
+});
 
-const restaurantIdExist = async (req, res, next) => {
-  try {
+const restaurantIdExist = catchAsync(async (req, res, next) => {
     const { restaurantId } = req.params;
 
     const restaurantExist = await Meal.findOne({ where: { restaurantId } });
@@ -36,9 +35,6 @@ const restaurantIdExist = async (req, res, next) => {
     }
     req.restaurantExist = restaurantExist;
     next();
-  } catch (error) {
-    console.log(error);
-  }
-};
+});
 
 module.exports = { mealExist, restaurantIdExist };

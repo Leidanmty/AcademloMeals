@@ -2,118 +2,113 @@
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-/*const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");*/
 
 //Models
 const { User } = require("../models/user.model");
 const { Order } = require("../models/order.model");
 
+// Utils
+const { catchAsync } = require('../utils/catchAsync.util');
+const { AppError } = require('../utils/appError.util');
+
+dotenv.config({ path: './details.env' });
+
 //creating endpoints functions
-const createUser = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const newUser = await User.create({ name, email, password });
+const createUser = catchAsync(async (req, res, next) => {
+  const { name, email, password } = req.body;
 
-    res.status(201).json({
-      status: "succes",
-      data: { newUser },
-    });
-  } catch (error) {
-    console.log(error);
+  // Encrypt the password
+  const salt = await bcrypt.genSalt(12);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const newUser = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  // Remove password from response
+  newUser.password = undefined;
+
+  // 201 -> Success and a resource has been created
+  res.status(201).json({
+    status: 'success',
+    data: { newUser },
+  });
+});
+
+const login = catchAsync(async (req, res, next) => {
+  // Get email and password from req.body
+  const { email, password } = req.body;
+
+  // Validate if the user exist with given email
+  const user = await User.findOne({
+    where: { email, status: 'active' },
+  });
+
+  // Compare passwords (entered password vs db password)
+  // If user doesn't exists or password doesn't match, send error
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return next(new AppError('Wrong credentials', 400));
   }
-};
 
-const login = async (req, res) => {
-  try {
-    //Get email and password from req.body
-    const { email, password } = req.body;
+  // Remove password from response
+  user.password = undefined;
 
-    //Validate if the user exist whit given email
-    const user = await User.findOne({
-      where: { email, status: "active" },
-    });
-    /* Compare password(entered password vs db password)
-    If user doesn't exists or password doesn't match, send error */
+  // Generate Json Web Token (payload, secretOrPrivateKey, options)
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      res.status(401).json({
-        status: "error",
-        message: "User or password incorrect please try again",
-      });
-    }
+  res.status(200).json({
+    status: 'success',
+    data: { user, token },
+  });
+});
 
-    //Remove password from response
-    user.password = undefined;
+const updateUser = catchAsync(async (req, res, next) => {
+  const { name, email } = req.body;
+  const { user } = req;
 
-    res.status(200).json({
-      status: "success",
-      data: { user },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  await user.update({ name, email });
 
-const updateUser = async (req, res) => {
-  try {
-    const { name, email } = req.body;
-    const { user } = req;
+  res.status(200).json({
+    status: 'success',
+    data: { user },
+  });
+});
 
-    await user.update({ name, email });
+const deleteUser = catchAsync(async (req, res, next) => {
+  const { user } = req;
 
-    res.status(200).json({
-      status: "success",
-      data: { user },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  await user.update({ status: 'deleted' });
 
-const deleteUser = async (req, res) => {
-  try {
-    const { user } = req;
+  res.status(204).json({ status: 'success' });
+});
 
-    await user.update({ status: "deleted" });
+const allOrders = catchAsync(async (req, res, next) => {
+  const orders = await User.findAll();
 
-    res.status(204).json({ status: "success" });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      orders,
+    },
+  });
+});
 
-const allOrders = async (req, res) => {
-  try {
-    const orders = await Order.findAll();
+const oneOrderById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        orders,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const order = await Order.findOne({ where: { id } });
 
-const oneOrderById = async (req, res) => {
-  try {
-    const order = await Order.findOne({
-      where: { id },
-    });
-
-    res.status(200).json({
-      status: "success",
-      data: {
-        order,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: {
+      order,
+    },
+  });
+});
 
 module.exports = {
   createUser,

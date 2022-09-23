@@ -1,7 +1,10 @@
 const { Order } = require("../models/order.model");
 
-const orderExist = async (req, res, next) => {
-  try {
+// Utils
+const { catchAsync } = require('../utils/catchAsync.util')
+const { AppError } = require('../utils/appError.util')
+
+const orderExist = catchAsync(async (req, res, next) => {
     const { id } = req.params;
 
     const order = await Order.findOne({ where: { id } });
@@ -15,9 +18,6 @@ const orderExist = async (req, res, next) => {
 
     req.order = order;
     next();
-  } catch (error) {
-    console.log(error);
-  }
-};
+});
 
 module.exports = { orderExist };

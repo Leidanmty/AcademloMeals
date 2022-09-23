@@ -1,7 +1,10 @@
 const { Restaurant } = require("../models/restaurant.model");
 
-const restaurantExist = async (req, res, next) => {
-  try {
+// Utils
+const { catchAsync } = require('../utils/catchAsync.util')
+const { AppError } = require('../utils/appError.util')
+
+const restaurantExist = catchAsync(async (req, res, next) => {
     const { id } = req.params;
 
     const restaurant = await Restaurant.findOne({ where: { id } });
@@ -15,9 +18,6 @@ const restaurantExist = async (req, res, next) => {
 
     req.restaurant = restaurant;
     next();
-  } catch (error) {
-    console.log();
-  }
-};
+});
 
 module.exports = { restaurantExist };
