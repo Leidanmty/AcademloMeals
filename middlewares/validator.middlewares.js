@@ -47,12 +47,12 @@ const createRestaurantValidators = [
   body("address")
     .isString()
     .withMessage("Address must be a string")
-    .isEmpty()
+    .notEmpty()
     .withMessage("Addres can't be empty"),
   body("rating")
     .isNumeric()
     .withMessage("Rating only be a number")
-    .isEmpty()
+    .notEmpty()
     .withMessage("Rating field is require")
     .isLength({ max: 1 })
     .withMessage("The rating must be of a digit"),

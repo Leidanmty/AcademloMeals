@@ -1,6 +1,7 @@
 //Models
 const { Restaurant } = require("../models/restaurants.model");
-
+const { Review } = require("../models/reviews.model");
+const { User } = require("../models/users.model");
 //Creating endpoints functions
 const createRestaurant = async (req, res) => {
   try {
@@ -20,9 +21,7 @@ const createRestaurant = async (req, res) => {
 
 const allRestaurants = async (req, res) => {
   try {
-    const restaurants = await Restaurant.findAll({
-      where: "active",
-    });
+    const restaurants = await Restaurant.findAll({});
 
     res.status(200).json({
       status: "success",
@@ -83,7 +82,14 @@ const removeRestaurant = async (req, res) => {
 const createReview = async (req, res) => {
   try {
     const { comment, rating } = req.body;
-    const newReview = await Restaurant.create({ comment, rating });
+    const { restaurant } = req;
+
+    const newReview = await Review.create({
+      comment,
+      rating,
+      restaurantId: restaurant.id,
+      userId: 1,
+    });
 
     res.status(201).json({
       status: "succes",
