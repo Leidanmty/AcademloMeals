@@ -1,9 +1,9 @@
 //Models
-const { User } = require("./users.model");
-const { Restaurant } = require("./restaurants.model");
-const { Review } = require("./reviews.model");
-const { Meal } = require("./meals.model");
-const { Order } = require("./orders.model");
+const { User } = require("./user.model");
+const { Restaurant } = require("./restaurant.model");
+const { Review } = require("./review.model");
+const { Meal } = require("./meal.model");
+const { Order } = require("./order.model");
 
 const initModels = () => {
   //1 User < ----- > M Orders
