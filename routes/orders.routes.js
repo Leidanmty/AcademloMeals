@@ -7,17 +7,22 @@ const {
   updateOrder,
   removeOrder,
 } = require("../controllers/orders.controller");
+
 //Middlewares
+const {
+  createOrderValidators,
+} = require("../middlewares/validator.middlewares");
+const { orderExist } = require("../middlewares/orders.middlewares");
 
 //Routes
 const ordersRoutes = express.Router();
 
-ordersRoutes.post("/", createOrder);
+ordersRoutes.post("/", createOrderValidators, createOrder);
 
 ordersRoutes.get("/me", allOrders);
 
-ordersRoutes.patch("/:id", updateOrder);
+ordersRoutes.patch("/:id", orderExist, updateOrder);
 
-ordersRoutes.delete("/:id", removeOrder);
+ordersRoutes.delete("/:id", orderExist, removeOrder);
 
 module.exports = { ordersRoutes };

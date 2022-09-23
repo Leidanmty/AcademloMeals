@@ -1,4 +1,5 @@
 //Modules
+const { Meal } = require("../models/meals.model");
 const { Order } = require("../models/orders.model");
 
 //creating endpoints functions
@@ -6,6 +7,16 @@ const { Order } = require("../models/orders.model");
 const createOrder = async (req, res) => {
   try {
     const { quantity, mealId } = req.body;
+
+    const mealIdExist = await Order.findOne({ where: { mealId } });
+
+    if (!mealIdExist) {
+      return res.status(404).json({
+        status: "error",
+        message: "mealId not found",
+      });
+    }
+
     const newOrder = await Order.create({ quantity, mealId });
 
     res.status(201).json({

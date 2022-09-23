@@ -1,4 +1,6 @@
 const express = require("express");
+
+//Controllers
 const {
   createRestaurant,
   allRestaurants,
@@ -10,22 +12,24 @@ const {
   deleteReview,
 } = require("../controllers/restaurants.controller");
 
-//Controllers
-
 //Middlewares
+const { restaurantExist } = require("../middlewares/restaurants.middlewares");
+const {
+  createRestaurantValidators,
+} = require("../middlewares/validator.middlewares");
 
 //Routes
 const restaurantsRoutes = express.Router();
 
-restaurantsRoutes.post("/", createRestaurant);
+restaurantsRoutes.post("/", createRestaurantValidators, createRestaurant);
 
 restaurantsRoutes.get("/", allRestaurants);
 
-restaurantsRoutes.get("/:id", oneRestaurant);
+restaurantsRoutes.get("/:id", restaurantExist, oneRestaurant);
 
-restaurantsRoutes.patch("/:id", updateRestaurant);
+restaurantsRoutes.patch("/:id", restaurantExist, updateRestaurant);
 
-restaurantsRoutes.delete("/:id", removeRestaurant);
+restaurantsRoutes.delete("/:id", restaurantExist, removeRestaurant);
 
 restaurantsRoutes.post("/reviews/:restaurantId", createReview);
 

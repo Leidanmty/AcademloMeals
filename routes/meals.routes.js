@@ -10,18 +10,30 @@ const {
 } = require("../controllers/meals.controller");
 
 //Middlewares
+const {
+  createMealValidators,
+} = require("../middlewares/validator.middlewares");
+const {
+  restaurantIdExist,
+  mealExist,
+} = require("../middlewares/meals.middlewares");
 
 //Routes
 const mealsRoutes = express.Router();
 
-mealsRoutes.post("/:restaurantId", createMeal);
+mealsRoutes.post(
+  "/:restaurantId",
+  restaurantIdExist,
+  createRestaurantValidators,
+  createMeal
+);
 
-mealsRoutes.get("/", allMeals);
+mealsRoutes.get("/", createMealValidators, allMeals);
 
-mealsRoutes.get("/:id", oneMeal);
+mealsRoutes.get("/:id", mealExist, oneMeal);
 
-mealsRoutes.patch("/:id", updateMeal);
+mealsRoutes.patch("/:id", mealExist, updateMeal);
 
-mealsRoutes.delete("/:id", removeMeal);
+mealsRoutes.delete("/:id", mealExist, removeMeal);
 
 module.exports = { mealsRoutes };

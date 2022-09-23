@@ -5,11 +5,13 @@ const { Meal } = require("../models/meals.model");
 const createMeal = async (req, res) => {
   try {
     const { name, price } = req.body;
-    const newMeal = await Meal.create({ name, price });
+    const { restaurantIdExist } = req;
+
+    await restaurantIdExist.create({ name, price });
 
     res.status(201).json({
       status: "Success",
-      data: { newMeal },
+      data: { restaurantIdExist },
     });
   } catch (error) {
     console.log(error);

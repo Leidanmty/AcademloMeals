@@ -10,14 +10,18 @@ const {
 } = require("../controllers/users.controller");
 
 //Middlewares
+const { userExist } = require("../middlewares/users.middlewares");
+const {
+  createUserValidators,
+} = require("../middlewares/validator.middlewares");
 
 //Routes
 const usersRoutes = express.Router();
 
-usersRoutes.post("/signup", createUser);
+usersRoutes.post("/signup", createUserValidators, createUser);
 usersRoutes.post("/login", login);
-usersRoutes.patch("/:id", updateUser);
-usersRoutes.delete("/:id", deleteUser);
+usersRoutes.patch("/:id", userExist, updateUser);
+usersRoutes.delete("/:id", userExist, deleteUser);
 usersRoutes.get("/orders", allOrders);
 usersRoutes.get("/orders/:id", oneOrderById);
 
