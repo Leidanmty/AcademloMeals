@@ -15,7 +15,9 @@ dotenv.config({ path: "./details.env" });
 const createOrder = catchAsync(async (req, res, next) => {
   const { quantity, mealId } = req.body;
 
-  const mealIdExist = await Order.findOne({ where: { mealId } });
+  const id = mealId;
+
+  const mealIdExist = await Meal.findOne({ where: { id } });
 
   if (!mealIdExist) {
     return res.status(404).json({
@@ -24,7 +26,10 @@ const createOrder = catchAsync(async (req, res, next) => {
     });
   }
 
-  const newOrder = await Order.create({ quantity, mealId });
+  const newOrder = await Order.create({
+    quantity,
+    mealId,
+  });
 
   res.status(201).json({
     status: "succes",

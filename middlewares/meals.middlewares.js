@@ -1,5 +1,6 @@
 //Models
 const { Meal } = require("../models/meal.model");
+const { Restaurant } = require("../models/restaurant.model");
 
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
@@ -24,18 +25,18 @@ const mealExist = catchAsync(async (req, res, next) => {
 });
 
 const restaurantIdExist = catchAsync(async (req, res, next) => {
-  const { restaurantId } = req.params;
+  const { id } = req.params;
 
-  const restaurantExist = await Meal.findOne({ where: { restaurantId } });
+  const restaurantId = await Restaurant.findOne({ where: { id } });
 
-  if (!restaurantExist) {
-    return next(new AppError("`Restaurant wiht id not exist", 404));
+  if (!restaurantId) {
+    return next(new AppError("`Restaurant with id not exist", 404));
     /*res.status(404).json({
       status: "error",
       message: `Restaurant whit id ${restaurantId} not exist`,
     });*/
   }
-  req.restaurantExist = restaurantExist;
+  req.restaurantId = restaurantId;
   next();
 });
 

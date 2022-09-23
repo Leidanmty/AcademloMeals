@@ -21,7 +21,7 @@ const {
 //Routes
 const mealsRouter = express.Router();
 
-mealsRouter.post("/:restaurantId", restaurantIdExist, createMeal);
+mealsRouter.post("/:id", restaurantIdExist, createMeal);
 
 mealsRouter.get("/", createMealValidators, allMeals);
 

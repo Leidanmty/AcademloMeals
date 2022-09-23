@@ -87,18 +87,14 @@ const deleteUser = catchAsync(async (req, res, next) => {
 });
 
 const allOrders = catchAsync(async (req, res, next) => {
-  const orders = await User.findAll({
-    include: [
-      {
-        model: Order,
-      },
-    ],
-  });
+  //const { }
+
+  const allOrdersUsers = await Order.findAll({});
 
   res.status(200).json({
     status: "success",
     data: {
-      orders,
+      allOrdersUsers,
     },
   });
 });

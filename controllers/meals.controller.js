@@ -12,13 +12,17 @@ dotenv.config({ path: "./details.env" });
 //Creating endpoints functions
 const createMeal = catchAsync(async (req, res, next) => {
   const { name, price } = req.body;
-  const { restaurantIdExist } = req;
+  const { restaurantId } = req;
 
-  await restaurantIdExist.create({ name, price });
+  const newMeal = await Meal.create({
+    name,
+    price,
+    restaurantId: restaurantId.id,
+  });
 
   res.status(201).json({
     status: "Success",
-    data: { restaurantIdExist },
+    data: { newMeal },
   });
 });
 
