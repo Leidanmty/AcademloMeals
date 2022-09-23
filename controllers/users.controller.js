@@ -1,17 +1,17 @@
 //files whit security
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
 //Models
 const { User } = require("../models/user.model");
 const { Order } = require("../models/order.model");
 
 // Utils
-const { catchAsync } = require('../utils/catchAsync.util');
-const { AppError } = require('../utils/appError.util');
+const { catchAsync } = require("../utils/catchAsync.util");
+const { AppError } = require("../utils/appError.util");
 
-dotenv.config({ path: './details.env' });
+dotenv.config({ path: "./details.env" });
 
 //creating endpoints functions
 const createUser = catchAsync(async (req, res, next) => {
@@ -32,7 +32,7 @@ const createUser = catchAsync(async (req, res, next) => {
 
   // 201 -> Success and a resource has been created
   res.status(201).json({
-    status: 'success',
+    status: "success",
     data: { newUser },
   });
 });
@@ -43,13 +43,13 @@ const login = catchAsync(async (req, res, next) => {
 
   // Validate if the user exist with given email
   const user = await User.findOne({
-    where: { email, status: 'active' },
+    where: { email, status: "active" },
   });
 
   // Compare passwords (entered password vs db password)
   // If user doesn't exists or password doesn't match, send error
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    return next(new AppError('Wrong credentials', 400));
+    return next(new AppError("Wrong credentials", 400));
   }
 
   // Remove password from response
@@ -57,11 +57,11 @@ const login = catchAsync(async (req, res, next) => {
 
   // Generate Json Web Token (payload, secretOrPrivateKey, options)
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: "30d",
   });
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: { user, token },
   });
 });
@@ -73,7 +73,7 @@ const updateUser = catchAsync(async (req, res, next) => {
   await user.update({ name, email });
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: { user },
   });
 });
@@ -81,16 +81,22 @@ const updateUser = catchAsync(async (req, res, next) => {
 const deleteUser = catchAsync(async (req, res, next) => {
   const { user } = req;
 
-  await user.update({ status: 'deleted' });
+  await user.update({ status: "deleted" });
 
-  res.status(204).json({ status: 'success' });
+  res.status(204).json({ status: "success" });
 });
 
 const allOrders = catchAsync(async (req, res, next) => {
-  const orders = await User.findAll();
+  const orders = await User.findAll({
+    include: [
+      {
+        model: Order,
+      },
+    ],
+  });
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: {
       orders,
     },
@@ -103,7 +109,7 @@ const oneOrderById = catchAsync(async (req, res, next) => {
   const order = await Order.findOne({ where: { id } });
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: {
       order,
     },

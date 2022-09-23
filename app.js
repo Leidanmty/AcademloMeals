@@ -6,7 +6,7 @@ const { restaurantsRouter } = require("./routes/restaurants.routes");
 const { mealsRouter } = require("./routes/meals.routes");
 const { ordersRouter } = require("./routes/orders.routes");
 
-// Prueba
+// testing
 
 //Init our Express app
 const app = express();

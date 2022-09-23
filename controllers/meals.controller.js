@@ -1,16 +1,13 @@
 //files whit security
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 
 //Models
-const { Meal } = require('../models/meal.model');
+const { Meal } = require("../models/meal.model");
 
 // Utils
-const { catchAsync } = require('../utils/catchAsync.util');
-const { AppError } = require('../utils/appError.util');
+const { catchAsync } = require("../utils/catchAsync.util");
 
-dotenv.config({ path: './details.env' });
+dotenv.config({ path: "./details.env" });
 
 //Creating endpoints functions
 const createMeal = catchAsync(async (req, res, next) => {
@@ -20,7 +17,7 @@ const createMeal = catchAsync(async (req, res, next) => {
   await restaurantIdExist.create({ name, price });
 
   res.status(201).json({
-    status: 'Success',
+    status: "Success",
     data: { restaurantIdExist },
   });
 });
@@ -28,11 +25,11 @@ const createMeal = catchAsync(async (req, res, next) => {
 //Obtener todas las comidas con status active
 const allMeals = catchAsync(async (req, res, next) => {
   const meals = await Meal.findAll({
-    where: { status: 'active' },
+    where: { status: "active" },
   });
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: { meals },
   });
 });
@@ -40,11 +37,11 @@ const allMeals = catchAsync(async (req, res, next) => {
 const oneMeal = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const meal = await Meal.findOne({
-    where: { id, status: 'active' },
+    where: { id, status: "active" },
   });
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: { meal },
   });
 });
@@ -56,7 +53,7 @@ const updateMeal = catchAsync(async (req, res, next) => {
   await meal.update({ name, price });
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: { meal },
   });
 });
@@ -64,9 +61,9 @@ const updateMeal = catchAsync(async (req, res, next) => {
 const removeMeal = catchAsync(async (req, res, next) => {
   const { meal } = req;
 
-  await meal.update({ status: 'deleted' });
+  await meal.update({ status: "deleted" });
 
-  res.status(204).json({ status: 'success' });
+  res.status(204).json({ status: "success" });
 });
 
 module.exports = {
