@@ -1,7 +1,7 @@
 //Models
-const { Restaurant } = require("../models/restaurants.model");
-const { Review } = require("../models/reviews.model");
-const { User } = require("../models/users.model");
+const { Restaurant } = require("../models/restaurant.model");
+const { Review } = require("../models/review.model");
+const { User } = require("../models/user.model");
 //Creating endpoints functions
 const createRestaurant = async (req, res) => {
   try {

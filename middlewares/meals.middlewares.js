@@ -1,5 +1,5 @@
 //Models
-const { Meal } = require("../models/meals.model");
+const { Meal } = require("../models/meal.model");
 
 //Middleware
 const mealExist = async (req, res, next) => {

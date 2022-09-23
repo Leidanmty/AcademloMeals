@@ -1,10 +1,10 @@
 const express = require("express");
 
 //Routers
-const { usersRoutes } = require("./routes/users.routes");
-const { restaurantsRoutes } = require("./routes/restaurants.routes");
-const { mealsRoutes } = require("./routes/meals.routes");
-const { ordersRoutes } = require("./routes/orders.routes");
+const { usersRouter } = require("./routes/users.routes");
+const { restaurantsRouter } = require("./routes/restaurants.routes");
+const { mealsRouter } = require("./routes/meals.routes");
+const { ordersRouter } = require("./routes/orders.routes");
 
 // Prueba
 
@@ -15,10 +15,10 @@ const app = express();
 app.use(express.json());
 
 //Define Endpoints
-app.use("/api/v1/users", usersRoutes);
-app.use("/api/v1/restaurants", restaurantsRoutes);
-app.use("/api/v1/meals", mealsRoutes);
-app.use("/api/v1/orders", ordersRoutes);
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/restaurants", restaurantsRouter);
+app.use("/api/v1/meals", mealsRouter);
+app.use("/api/v1/orders", ordersRouter);
 
 //Catch non-existing endpoints
 app.all("*", (req, res) => {

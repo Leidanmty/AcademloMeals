@@ -19,22 +19,22 @@ const {
 } = require("../middlewares/validator.middlewares");
 
 //Routes
-const restaurantsRoutes = express.Router();
+const restaurantsRouter = express.Router();
 
-restaurantsRoutes.post("/", createRestaurantValidators, createRestaurant);
+restaurantsRouter.post("/", createRestaurantValidators, createRestaurant);
 
-restaurantsRoutes.get("/", allRestaurants);
+restaurantsRouter.get("/", allRestaurants);
 
-restaurantsRoutes.get("/:id", restaurantExist, oneRestaurant);
+restaurantsRouter.get("/:id", restaurantExist, oneRestaurant);
 
-restaurantsRoutes.patch("/:id", restaurantExist, updateRestaurant);
+restaurantsRouter.patch("/:id", restaurantExist, updateRestaurant);
 
-restaurantsRoutes.delete("/:id", restaurantExist, removeRestaurant);
+restaurantsRouter.delete("/:id", restaurantExist, removeRestaurant);
 
-restaurantsRoutes.post("/reviews/:restaurantId", createReview);
+restaurantsRouter.post("/reviews/:restaurantId", createReview);
 
-restaurantsRoutes.patch("/reviews", updateReview);
+restaurantsRouter.patch("/reviews", updateReview);
 
-restaurantsRoutes.delete("/reviews", deleteReview);
+restaurantsRouter.delete("/reviews", deleteReview);
 
-module.exports = { restaurantsRoutes };
+module.exports = { restaurantsRouter };

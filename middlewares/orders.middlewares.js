@@ -1,4 +1,4 @@
-const { Order } = require("../models/orders.model");
+const { Order } = require("../models/order.model");
 
 const orderExist = async (req, res, next) => {
   try {
@@ -9,7 +9,7 @@ const orderExist = async (req, res, next) => {
     if (!order) {
       return res.status(404).json({
         status: "error",
-        message: "Oder not found",
+        message: "Order not found",
       });
     }
 

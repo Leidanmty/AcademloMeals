@@ -15,14 +15,14 @@ const {
 const { orderExist } = require("../middlewares/orders.middlewares");
 
 //Routes
-const ordersRoutes = express.Router();
+const ordersRouter = express.Router();
 
-ordersRoutes.post("/", createOrderValidators, createOrder);
+ordersRouter.post("/", createOrderValidators, createOrder);
 
-ordersRoutes.get("/me", allOrders);
+ordersRouter.get("/me", allOrders);
 
-ordersRoutes.patch("/:id", orderExist, updateOrder);
+ordersRouter.patch("/:id", orderExist, updateOrder);
 
-ordersRoutes.delete("/:id", orderExist, removeOrder);
+ordersRouter.delete("/:id", orderExist, removeOrder);
 
-module.exports = { ordersRoutes };
+module.exports = { ordersRouter };

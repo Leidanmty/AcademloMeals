@@ -12,17 +12,25 @@ const {
 //Middlewares
 const { userExist } = require("../middlewares/users.middlewares");
 const {
+  protectSession,
+  protectUsersAccount,
+} = require('../middlewares/auth.middlewares');
+const {
   createUserValidators,
 } = require("../middlewares/validator.middlewares");
 
 //Routes
-const usersRoutes = express.Router();
+const usersRouter = express.Router();
 
-usersRoutes.post("/signup", createUserValidators, createUser);
-usersRoutes.post("/login", login);
-usersRoutes.patch("/:id", userExist, updateUser);
-usersRoutes.delete("/:id", userExist, deleteUser);
-usersRoutes.get("/orders", allOrders);
-usersRoutes.get("/orders/:id", oneOrderById);
+usersRouter.post("/signup", createUserValidators, createUser);
+usersRouter.post("/login", login);
 
-module.exports = { usersRoutes };
+usersRouter.use(protectSession);
+
+usersRouter.patch("/:id", userExist, protectUsersAccount, updateUser);
+usersRouter.delete("/:id", userExist, protectUsersAccount, deleteUser);
+usersRouter.get("/orders", allOrders);
+usersRouter.get("/orders/:id", oneOrderById);
+
+
+module.exports = { usersRouter };

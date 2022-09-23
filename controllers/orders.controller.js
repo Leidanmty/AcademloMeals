@@ -1,6 +1,6 @@
 //Modules
-const { Meal } = require("../models/meals.model");
-const { Order } = require("../models/orders.model");
+const { Meal } = require("../models/meal.model");
+const { Order } = require("../models/order.model");
 
 //creating endpoints functions
 //Crear una nueva order (enviar quantity y mealId por req.body)

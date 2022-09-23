@@ -19,16 +19,16 @@ const {
 } = require("../middlewares/meals.middlewares");
 
 //Routes
-const mealsRoutes = express.Router();
+const mealsRouter = express.Router();
 
-mealsRoutes.post("/:restaurantId", restaurantIdExist, createMeal);
+mealsRouter.post("/:restaurantId", restaurantIdExist, createMeal);
 
-mealsRoutes.get("/", createMealValidators, allMeals);
+mealsRouter.get("/", createMealValidators, allMeals);
 
-mealsRoutes.get("/:id", mealExist, oneMeal);
+mealsRouter.get("/:id", mealExist, oneMeal);
 
-mealsRoutes.patch("/:id", mealExist, updateMeal);
+mealsRouter.patch("/:id", mealExist, updateMeal);
 
-mealsRoutes.delete("/:id", mealExist, removeMeal);
+mealsRouter.delete("/:id", mealExist, removeMeal);
 
-module.exports = { mealsRoutes };
+module.exports = { mealsRouter };
