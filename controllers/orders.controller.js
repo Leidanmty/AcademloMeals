@@ -14,6 +14,7 @@ dotenv.config({ path: "./details.env" });
 //Crear una nueva order (enviar quantity y mealId por req.body)
 const createOrder = catchAsync(async (req, res, next) => {
   const { quantity, mealId } = req.body;
+  const { sessionUser } = req;
 
   const id = mealId;
 
@@ -26,9 +27,13 @@ const createOrder = catchAsync(async (req, res, next) => {
     });
   }
 
+  const total = mealIdExist.price * quantity;
+
   const newOrder = await Order.create({
     quantity,
     mealId,
+    userId: sessionUser.id,
+    totalprice: total,
   });
 
   res.status(201).json({

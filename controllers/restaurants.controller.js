@@ -79,12 +79,13 @@ const removeRestaurant = catchAsync(async (req, res, next) => {
 const createReview = catchAsync(async (req, res, next) => {
   const { comment, rating } = req.body;
   const { restaurant } = req;
+  const { sessionUser } = req;
 
   const newReview = await Review.create({
     comment,
     rating,
     restaurantId: restaurant.id,
-    userId: 1,
+    userId: sessionUser.id,
   });
 
   res.status(201).json({

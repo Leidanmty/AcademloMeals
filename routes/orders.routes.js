@@ -13,9 +13,12 @@ const {
   createOrderValidators,
 } = require("../middlewares/validator.middlewares");
 const { orderExist } = require("../middlewares/orders.middlewares");
+const { protectSession } = require("../middlewares/auth.middlewares");
 
 //Routes
 const ordersRouter = express.Router();
+
+ordersRouter.use(protectSession);
 
 ordersRouter.post("/", createOrderValidators, createOrder);
 
